@@ -1,0 +1,82 @@
+# 1. MySQL Database Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-db
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "root"
+        - name: MYSQL_DATABASE
+          value: "your_db_name"
+        ports:
+        - containerPort: 3306
+
+---
+# 2. MySQL Service (App ला DB शी जोडण्यासाठी)
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-service
+spec:
+  selector:
+    app: mysql
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+
+---
+# 3. PHP App Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: techhub-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: techhub
+  template:
+    metadata:
+      labels:
+        app: techhub
+    spec:
+      containers:
+      - name: php-app
+        image: your-dockerhub-username/techhub-image:latest # तुमची इमेज इथे टाका
+        ports:
+        - containerPort: 80
+        env:
+        - name: DB_HOST
+          value: "db-service"
+        - name: DB_USER
+          value: "root"
+        - name: DB_PASS
+          value: "root"
+
+---
+# 4. App Service (बाहेरून एक्सेस करण्यासाठी)
+apiVersion: v1
+kind: Service
+metadata:
+  name: techhub-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: techhub
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

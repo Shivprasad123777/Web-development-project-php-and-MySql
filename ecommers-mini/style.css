@@ -1,0 +1,251 @@
+/* =========================
+    GLOBAL RESET
+========================= */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* =========================
+    BODY & BACKGROUND
+========================= */
+body {
+    min-height: 100vh;
+    background: linear-gradient(
+        135deg,
+        #22c55e,
+        #06b6d4,
+        #6366f1,
+        #a855f7
+    );
+    background-size: 400% 400%;
+    animation: gradientMove 10s ease infinite;
+    /* महत्वाचे: इथले display: flex काढून टाकले आहे */
+    font-family: Arial, sans-serif;
+}
+
+@keyframes gradientMove{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+/* =========================
+    NAVBAR (तुमचा नेव्हबार फिक्स केला)
+========================= */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background: #020617;
+    color: #fff;
+    width: 100%; /* पूर्ण रुंदी */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+}
+
+.nav-links a {
+    margin-left: 20px;
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* =========================
+    PRODUCTS GRID
+========================= */
+.products {
+    max-width: 1200px;
+    margin: 50px auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    padding: 0 20px;
+}
+
+/* =========================
+    PRODUCT CARD
+========================= */
+.card {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    color: #fff;
+    transition: 0.3s;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.card:hover {
+    transform: translateY(-10px);
+}
+
+.img-box img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.card h3 { margin: 15px 0 10px; }
+.card p { font-size: 18px; font-weight: bold; margin-bottom: 15px; }
+
+.add-btn {
+    background: #fff;
+    color: #111;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.add-btn:hover { background: #f28c28; color: #fff; }
+
+/* =========================
+    CART POPUP STYLES
+========================= */
+#/* --- Overlay with Blur --- */
+#cartOverlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(15, 23, 42, 0.7); /* Darker blueish overlay */
+    backdrop-filter: blur(10px);
+    z-index: 9998;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+#cartOverlay.show {
+    display: block;
+    opacity: 1;
+}
+
+/* --- Main Popup Window --- */
+#cartPopup {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.7); /* Starts smaller */
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px;
+    border-radius: 40px;
+    z-index: 9999;
+    text-align: center;
+    width: 360px;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5), 
+                inset 0 0 20px rgba(255, 255, 255, 0.5);
+    display: none;
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy effect */
+}
+
+#cartPopup.show {
+    display: block;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* --- Animated Icons --- */
+.popup-icon-wrapper { margin-bottom: 25px; }
+
+.popup-icon-circle {
+    width: 90px;
+    height: 90px;
+    background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
+    background-size: 200% 200%;
+    animation: gradientShift 3s ease infinite;
+    color: white;
+    font-size: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    border-radius: 30px; /* Squircle shape */
+    position: relative;
+    box-shadow: 0 15px 30px rgba(168, 85, 247, 0.4);
+}
+
+.icon-anim {
+    position: absolute;
+    top: -10px; right: -10px;
+    animation: sparkle 1.5s infinite alternate;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes sparkle {
+    from { transform: scale(0.8); opacity: 0.5; }
+    to { transform: scale(1.2); opacity: 1; }
+}
+
+/* --- Typography --- */
+.popup-title {
+    color: #1e293b;
+    font-size: 26px;
+    margin-bottom: 10px;
+    font-weight: 800;
+}
+
+.popup-text {
+    color: #64748b;
+    font-size: 16px;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+/* --- Modern Buttons --- */
+.popup-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.btn-view {
+    background: linear-gradient(to right, #6366f1, #8b5cf6);
+    color: white;
+    padding: 15px;
+    text-decoration: none;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 16px;
+    transition: 0.3s;
+    box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+}
+
+.btn-view:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(99, 102, 241, 0.4);
+}
+
+.btn-continue {
+    background: #f1f5f9;
+    border: none;
+    color: #475569;
+    padding: 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.btn-continue:hover {
+    background: #e2e8f0;
+    color: #1e293b;
+}
